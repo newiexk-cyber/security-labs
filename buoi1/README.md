@@ -136,3 +136,20 @@ Gửi request `POST http://localhost:5000/validate` với body JSON chứa thôn
 - **Phản hồi API**: Trả về mã HTTP 200 kèm JSON kết quả đã qua bộ lọc an toàn (`"sql": "1=1"`, `"html": "&lt;script&gt;..."`).
 - **Nội dung tệp `secure.log`**: Địa chỉ email thực tế của người dùng đã tự động được che giấu thành **`'email': '<email_masked>'`**, bảo vệ an toàn thông tin định danh cá nhân (PII).
 - **Tệp chữ ký `secure.log.sig`**: Chứa chuỗi mã băm SHA-256 đối soát cho từng dòng log. Nếu bất kỳ ai can thiệp chỉnh sửa file `secure.log`, việc so khớp mã băm sẽ lập tức phát hiện sự sai lệch.
+
+---
+
+## 5. Bảng tổng hợp Key Test bảo mật (Test Cases & Payloads)
+
+Dưới đây là bảng tổng hợp chi tiết toàn bộ các kịch bản kiểm thử (Key Test), payload thực nghiệm và cơ chế phòng thủ đã triển khai xuyên suốt 3 Lab:
+
+| STT | Kịch bản kiểm thử | Dữ liệu đầu vào / Payload (Key Test) | Mục tiêu bảo mật | Kết quả & Cơ chế xử lý | Trạng thái |
+| :---: | :--- | :--- | :--- | :--- | :---: |
+| 1 | **Email Validation** | `nhatlam@gmail.com` | Xác thực định dạng địa chỉ thư điện tử | Hợp lệ: Khớp regex chuẩn, loại trừ hai dấu chấm liên tiếp (`..`) | **PASS** |
+| 2 | **URL Validation** | `https://www.hutech.edu.vn` | Phòng chống giả mạo URL & tấn công SSRF | Hợp lệ: Chỉ chấp nhận `http`/`https` và yêu cầu domain rõ ràng | **PASS** |
+| 3 | **Path Traversal** | `../../etc/passwd` | Ngăn chặn leo thang thư mục đọc file hệ thống | Chặn: Phát hiện ký tự nguy hiểm (`..`, `/`, `\`), từ chối xử lý | **PASS** |
+| 4 | **SQL Injection** | `' OR 1=1 --` | Phòng chống tấn công bẻ gãy truy vấn SQL | Làm sạch: Lọc bỏ toàn bộ ký tự `'`, từ khóa `OR` và chú thích `--`, còn lại `1=1` | **PASS** |
+| 5 | **Cross-Site Scripting (XSS)** | `<script>alert("XSS")</script>` | Chống thực thi mã JavaScript độc hại trên trình duyệt | Làm sạch: Mã hóa thành `&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;` | **PASS** |
+| 6 | **Git Leak Detection** | Biến chứa mật khẩu trong mã nguồn | Chống lộ lọt thông tin nhạy cảm lên Git | Chặn: Pre-commit hook bắt regex, trả về `exit(1)` và hủy commit | **PASS** |
+| 7 | **PII Masking** | Email người dùng trong nội dung log | Bảo vệ dữ liệu định danh cá nhân theo chuẩn bảo mật | Ẩn danh: Tự động thay thế địa chỉ email thành `<email_masked>` | **PASS** |
+| 8 | **Log Tamper Detection** | Dòng log ghi vào file `secure.log` | Chống giả mạo và sửa đổi nhật ký hệ thống | Băm SHA-256 lưu vào `secure.log.sig` phục vụ đối soát toàn vẹn | **PASS** |
