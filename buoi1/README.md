@@ -9,31 +9,37 @@
 
 ```text
 buoi1/
-├── README.md               # Báo cáo tổng hợp buổi 1
+├── README.md               # Báo cáo tổng hợp buổi 1 kèm ảnh minh chứng
+├── images/                 # Ảnh chụp các kết quả kiểm thử bảo mật (Key tests)
+│   ├── lab1_unittest_result.png
+│   ├── lab1_web_test_result.png
+│   ├── lab2_hook_blocked.png
+│   ├── lab3_postman_api.png
+│   └── lab3_response_and_log.png
 ├── lab1/                   # Lab 1: Kiểm tra và làm sạch dữ liệu đầu vào
-│   ├── app.py              # Ứng dụng Flask
-│   ├── requirements.txt    # Danh sách thư viện
-│   ├── render.yaml         # Cấu hình deploy Render
-│   ├── securevalidator/    # Module xử lý kiểm tra đầu vào
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── render.yaml
+│   ├── securevalidator/
 │   │   ├── __init__.py
 │   │   └── core.py
 │   ├── templates/
-│   │   └── index.html      # Giao diện web kiểm tra
+│   │   └── index.html
 │   └── tests/
 │       └── test_validators.py
 ├── lab2/                   # Lab 2: Git Security Hook
 │   ├── requirements.txt
 │   ├── .githooks/
-│   │   └── pre-commit      # Script hook chặn rò rỉ secret
+│   │   └── pre-commit
 │   └── pre-commit-hook-test/
-│       └── bad.py          # File test vi phạm
+│       └── bad.py
 └── lab3/                   # Lab 3: Hệ thống Secure Logger
-    ├── app.py              # API Flask /validate
+    ├── app.py
     ├── requirements.txt
-    ├── securevalidator/    # Kế thừa module validator từ Lab 1
+    ├── securevalidator/
     │   ├── __init__.py
     │   └── core.py
-    ├── securelogger/       # Module ghi log an toàn
+    ├── securelogger/
     │   ├── __init__.py
     │   └── logger.py
     └── tests/
@@ -45,76 +51,88 @@ buoi1/
 ## 2. Lab 1: Kiểm tra và làm sạch dữ liệu đầu vào (Input Validation & Sanitization)
 
 ### 2.1. Mục tiêu
-Áp dụng nguyên tắc kiểm tra chặt chẽ dữ liệu đầu vào của người dùng trước khi xử lý, ngăn chặn các lỗi bảo mật phổ biến như SQL Injection, Cross-Site Scripting (XSS), Directory Traversal và SSRF.
+Áp dụng nguyên tắc kiểm tra nghiêm ngặt dữ liệu đầu vào trước khi ứng dụng xử lý, ngăn ngừa các lỗ hổng phổ biến trong OWASP Top 10 như SQL Injection, Cross-Site Scripting (XSS), Directory Traversal và SSRF.
 
 ### 2.2. Chi tiết thực hiện (`lab1/securevalidator/core.py`)
-- **Kiểm tra email (`validate_email`)**: Dùng biểu thức chính quy để kiểm tra đúng cấu trúc email, đồng thời chặn các trường hợp chứa hai dấu chấm liên tiếp (`..`).
-- **Kiểm tra URL (`validate_url`)**: Sử dụng thư viện `urllib.parse` để bóc tách URL, chỉ cho phép các giao thức an toàn (`http`, `https`) và bắt buộc phải có tên miền hợp lệ để hạn chế tấn công SSRF cơ bản.
-- **Kiểm tra tên file (`validate_filename`)**: Kiểm tra và chặn các ký tự điều hướng thư mục như `..`, `/`, `\` nhằm ngăn chặn tấn công đọc file tùy ý (Path Traversal).
-- **Lọc chuỗi SQL (`sanitize_sql_input`)**: Sử dụng Regex để loại bỏ các ký tự bẻ gãy cú pháp SQL (`'`, `"`, `;`, `--`, `#`) và các từ khóa truy vấn nguy hiểm (`SELECT`, `INSERT`, `UPDATE`, `DELETE`, `DROP`, `OR`, `AND`, `UNION`, `WHERE`).
-- **Mã hóa HTML (`sanitize_html_input`)**: Dùng `html.escape` để chuyển đổi các ký tự `<`, `>`, `&`, `"` thành mã HTML entities, tránh bị thực thi mã JavaScript độc hại trên trình duyệt (XSS).
+- **Kiểm tra email (`validate_email`)**: Sử dụng biểu thức chính quy kiểm tra định dạng email và loại trừ trường hợp chứa hai dấu chấm liên tiếp (`..`).
+- **Kiểm tra URL (`validate_url`)**: Phân tách URL bằng `urllib.parse`, chỉ chấp nhận giao thức an toàn `http`/`https` và bắt buộc có domain hợp lệ để phòng chống tấn công SSRF cơ bản.
+- **Kiểm tra tên file (`validate_filename`)**: Chặn các chuỗi leo thang thư mục như `..`, `/`, `\\` và so sánh `os.path.basename(filename) == filename` để chống Path Traversal.
+- **Làm sạch SQL (`sanitize_sql_input`)**: Loại bỏ các ký tự bẻ gãy câu lệnh (`'`, `"`, `;`, `--`, `#`) và các từ khóa truy vấn nhạy cảm (`SELECT`, `INSERT`, `UPDATE`, `DELETE`, `DROP`, `OR`, `AND`, `UNION`, `WHERE`).
+- **Mã hóa HTML (`sanitize_html_input`)**: Dùng `html.escape` chuyển đổi các ký tự đặc biệt `<`, `>`, `&`, `"` thành HTML entities, ngăn chặn trình duyệt thực thi JavaScript độc hại.
 
-### 2.3. Kết quả kiểm thử
-- **Unit test**: Chạy lệnh `python -m unittest discover tests`, toàn bộ 10/10 test case đều pass (kiểm tra cả trường hợp dữ liệu đúng và dữ liệu cố ý tấn công).
-- **Kiểm tra trên web (`app.py`)**:
-  - Email đúng: báo hợp lệ (xanh).
-  - URL hợp lệ: báo hợp lệ (xanh).
-  - Tên file chứa `../../etc/passwd`: bị từ chối (báo đỏ).
-  - Dữ liệu SQL `' OR 1=1 --`: được lọc còn `1=1`.
-  - Dữ liệu HTML `<script>alert(1)</script>`: được mã hóa thành `&lt;script&gt;alert(1)&lt;/script&gt;`.
+### 2.3. Hình ảnh kiểm thử và giải thích chi tiết
+
+#### a. Kiểm thử tự động (Unit Test):
+Chạy lệnh `python -m unittest discover tests`, toàn bộ các bài test kiểm tra dữ liệu hợp lệ và dữ liệu tấn công đều đạt kết quả `OK`:
+
+![Kết quả chạy Unit Test Lab 1](./images/lab1_unittest_result.png)
+
+*Giải thích*: Bộ test kiểm tra 10 kịch bản, bao gồm kiểm tra email sai định dạng, URL dùng giao thức không an toàn (`ftp://`), đường dẫn chứa ký tự điều hướng (`../../etc/passwd`) và các chuỗi chèn mã độc.
+
+#### b. Kiểm thử trên giao diện Web (`http://127.0.0.1:5000`):
+Tiến hành nhập đồng thời 5 trường dữ liệu mẫu để kiểm tra cơ chế phòng thủ:
+
+![Kết quả kiểm thử trên giao diện web Lab 1](./images/lab1_web_test_result.png)
+
+*Giải thích chi tiết từng kết quả*:
+1. **Email (`hongphuoc@gmail.com`)**: Hiển thị **"Email hợp lệ"** (màu xanh) do chuỗi khớp hoàn toàn với mẫu regex.
+2. **URL (`https://www.hutech.edu.vn`)**: Hiển thị **"URL hợp lệ"** (màu xanh) do sử dụng giao thức HTTPS và có domain rõ ràng.
+3. **Filename (`../../etc/passwd`)**: Hiển thị **"Tên file không hợp lệ"** (màu đỏ). Hệ thống phát hiện chuỗi `..` và `/` của kỹ thuật Path Traversal nhằm đọc trộm file cấu hình Linux, kịp thời từ chối xử lý.
+4. **SQL Input (`' OR 1=1 --`)**: Hiển thị kết quả **"Đã lọc: 1=1"**. Dấu nháy đơn `'`, từ khóa `OR` và phần chú thích `--` đã bị cắt bỏ hoàn toàn, vô hiệu hóa kịch bản bypass authentication.
+5. **HTML Input (`<script>alert("XSS")</script>`)**: Hiển thị **"Đã mã hóa: `&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;`"**. Các thẻ HTML đã được escape thành text thuần, trình duyệt hiển thị an toàn và không bị nổ popup script.
 
 ---
 
 ## 3. Lab 2: Cấu hình Git Security Hook
 
 ### 3.1. Mục tiêu
-Sử dụng tính năng Pre-commit Hook của Git để quét mã nguồn trên máy lập trình viên trước mỗi lần commit, ngăn chặn việc vô tình đẩy mật khẩu, API key hoặc token dịch vụ đám mây lên kho lưu trữ.
+Thiết lập Git Pre-commit Hook tự động quét mã nguồn ở tầng client trước khi commit, ngăn chặn tình trạng vô tình đẩy các thông tin nhạy cảm (passwords, API keys, private tokens, AWS access keys) lên GitHub.
 
 ### 3.2. Chi tiết thực hiện (`lab2/.githooks/pre-commit`)
-- Script được viết bằng Python và cấu hình hook thông qua lệnh:
+- Đăng ký thư mục hook với Git:
   ```bash
   git config core.hooksPath buoi1/lab2/.githooks
   ```
-- Hook tự động lấy danh sách file đang được `git add` (`git diff --cached --name-only`) và kiểm tra nội dung dựa trên danh sách Regex:
-  - Mẫu API Key: `(apikey)\s*[:=]\s*['"][A-Za-z0-9_-]{16,}['"]`
-  - Mẫu Password: `(password)\s*[:=]\s*['"][^'"\s]{4,}['"]`
-  - Mẫu Secret: `(secret)\s*[:=]\s*['"][A-Za-z0-9_\-]{8,}['"]`
-  - Mẫu AWS Access Key: `(AKIA|ASIA)[A-Z0-9]{16}`
-- Nếu phát hiện vi phạm, hook in thông báo lỗi, ghi log vào `gitsecure.log` và trả về mã thoát `sys.exit(1)` để dừng lệnh commit.
+- Hook tự động lấy danh sách file đang stage (`git diff --cached --name-only`) và đối soát với danh sách mẫu regex bí mật (`SENSITIVE_PATTERNS`).
+- Nếu phát hiện vi phạm, hook trả về mã lỗi `sys.exit(1)`, hủy bỏ lệnh commit và ghi log vào tệp `gitsecure.log`.
 
-### 3.3. Kết quả thử nghiệm
-- Tạo file `pre-commit-hook-test/bad.py` chứa nội dung:
-  ```python
-  password = "super_secret_password_12345"
-  ```
-- Khi chạy lệnh commit:
-  ```bash
-  git add buoi1/lab2/pre-commit-hook-test/bad.py
-  git commit -m "test commit"
-  ```
-- Kết quả: Git tự động chặn commit và hiển thị thông báo:
-  ```text
-  COMMIT BLOCKED by GitSecure:
-   - Sensitive info found in bad.py: pattern (password)...
-  ```
+### 3.3. Hình ảnh kiểm thử và giải thích chi tiết
+
+Tạo file `pre-commit-hook-test/bad.py` chứa biến `password = "123456"`. Khi chạy lệnh `git add` và thực hiện `git commit -m "test"`:
+
+![Kết quả Git Hook chặn commit chứa secret](./images/lab2_hook_blocked.png)
+
+*Giải thích chi tiết*:
+- Terminal thông báo rõ: **`COMMIT BLOCKED by GitSecure`**.
+- Phát hiện tệp `bad.py` vi phạm mẫu mật khẩu: `pattern password\s*[:=]\s*...`.
+- Git tự động hủy commit, ngăn không cho mật khẩu bị đưa vào lịch sử commit của repository.
+- Vi phạm được ghi lại trong `gitsecure.log` để phục vụ audit.
 
 ---
 
 ## 4. Lab 3: Xây dựng hệ thống Secure Logger
 
 ### 4.1. Mục tiêu
-Xây dựng module ghi log an toàn cho ứng dụng Flask, giải quyết các vấn đề thường gặp: lộ thông tin cá nhân trong log, tấn công chèn mã giả mạo log (Log Injection) và kiểm tra tính toàn vẹn của tệp nhật ký.
+Xây dựng module ghi log an toàn cho ứng dụng Flask, đáp ứng 4 tiêu chuẩn bảo mật nhật ký: che giấu dữ liệu định danh cá nhân (PII), chống tấn công Log Injection, xác thực tính toàn vẹn (Tamper Detection) và tự động xoay vòng nén log (Log Rotation).
 
 ### 4.2. Chi tiết thực hiện (`lab3/securelogger/logger.py`)
-- **Che giấu thông tin cá nhân (`mask_pii`)**: Tự động nhận diện địa chỉ email, mật khẩu hoặc token có trong log và thay thế bằng nhãn `<email_masked>`, `<token_masked>`.
-- **Định dạng JSON (`JSONFormatter`)**: Ghi log theo định dạng JSON một dòng kèm dấu thời gian chuẩn UTC ISO 8601, giúp chống lỗi ngắt dòng và dễ tích hợp với các hệ thống phân tích log.
-- **Xác thực toàn vẹn bằng SHA-256 (`append_signature`)**: Mỗi dòng log khi ghi vào `secure.log` sẽ đồng thời được băm SHA-256 và lưu vào file `secure.log.sig`. Nếu tệp log bị chỉnh sửa thủ công, chuỗi băm sẽ không khớp.
-- **Quản lý dung lượng (`GZipRotator`)**: Cấu hình luân phiên log khi đạt kích thước 1MB và tự động nén các file cũ thành dạng `.gz`.
+- **Che giấu PII (`mask_pii`)**: Tự động nhận diện Email và Password/Token trong nội dung log và thay thế bằng `<email_masked>`, `<token_masked>`.
+- **Định dạng JSON một dòng (`JSONFormatter`)**: Ngăn chặn kẻ tấn công chèn ký tự xuống dòng `\r\n` để tạo log giả mạo.
+- **Xác thực toàn vẹn bằng SHA-256 (`append_signature`)**: Mỗi dòng log khi ghi vào `secure.log` sẽ đồng thời được băm SHA-256 và lưu vào file `secure.log.sig`.
+- **Quản lý dung lượng (`GZipRotator`)**: Luân phiên file log khi đạt dung lượng 1MB và nén thành dạng `.gz`.
 
-### 4.3. Kết quả kiểm thử
-- **Unit test**: Chạy `python -m unittest discover tests` trong thư mục `lab3`, vượt qua 4/4 bài kiểm tra.
-- **Kiểm tra API (`POST /validate`)**:
-  - Gửi dữ liệu JSON chứa email và payload test.
-  - Phản hồi trả về kết quả đã được làm sạch.
-  - Tệp `secure.log` ghi lại log với trường email đã được che thành `<email_masked>`.
-  - Tệp `secure.log.sig` sinh mã băm SHA-256 đối soát tương ứng.
+### 4.3. Hình ảnh kiểm thử và giải thích chi tiết
+
+#### a. Kiểm thử API qua Postman:
+Gửi request `POST http://localhost:5000/validate` với body JSON chứa thông tin email và các payload thử nghiệm:
+
+![Gửi Request kiểm thử qua Postman](./images/lab3_postman_api.png)
+
+#### b. Kết quả Response và kiểm tra tệp `secure.log`:
+
+![Kết quả API và tệp log che giấu PII](./images/lab3_response_and_log.png)
+
+*Giải thích chi tiết*:
+- **Phản hồi API**: Trả về mã HTTP 200 kèm JSON kết quả đã qua bộ lọc an toàn (`"sql": "1=1"`, `"html": "&lt;script&gt;..."`).
+- **Nội dung tệp `secure.log`**: Địa chỉ email thực tế của người dùng đã tự động được che giấu thành **`'email': '<email_masked>'`**, bảo vệ an toàn thông tin định danh cá nhân (PII).
+- **Tệp chữ ký `secure.log.sig`**: Chứa chuỗi mã băm SHA-256 đối soát cho từng dòng log. Nếu bất kỳ ai can thiệp chỉnh sửa file `secure.log`, việc so khớp mã băm sẽ lập tức phát hiện sự sai lệch.
