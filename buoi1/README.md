@@ -75,7 +75,7 @@ Tiến hành nhập đồng thời 5 trường dữ liệu mẫu để kiểm tr
 ![Kết quả kiểm thử trên giao diện web Lab 1](./images/lab1_web_test_result.png)
 
 *Giải thích chi tiết từng kết quả*:
-1. **Email (`hongphuoc@gmail.com`)**: Hiển thị **"Email hợp lệ"** (màu xanh) do chuỗi khớp hoàn toàn với mẫu regex.
+1. **Email (`nhatlam@gmail.com`)**: Hiển thị **"Email hợp lệ"** (màu xanh) do chuỗi khớp hoàn toàn với mẫu regex.
 2. **URL (`https://www.hutech.edu.vn`)**: Hiển thị **"URL hợp lệ"** (màu xanh) do sử dụng giao thức HTTPS và có domain rõ ràng.
 3. **Filename (`../../etc/passwd`)**: Hiển thị **"Tên file không hợp lệ"** (màu đỏ). Hệ thống phát hiện chuỗi `..` và `/` của kỹ thuật Path Traversal nhằm đọc trộm file cấu hình Linux, kịp thời từ chối xử lý.
 4. **SQL Input (`' OR 1=1 --`)**: Hiển thị kết quả **"Đã lọc: 1=1"**. Dấu nháy đơn `'`, từ khóa `OR` và phần chú thích `--` đã bị cắt bỏ hoàn toàn, vô hiệu hóa kịch bản bypass authentication.
@@ -98,7 +98,7 @@ Thiết lập Git Pre-commit Hook tự động quét mã nguồn ở tầng clie
 
 ### 3.3. Hình ảnh kiểm thử và giải thích chi tiết
 
-Tạo file `pre-commit-hook-test/bad.py` chứa biến `password = "123456"`. Khi chạy lệnh `git add` và thực hiện `git commit -m "test"`:
+Tạo file `pre-commit-hook-test/bad.py` chứa biến `chuoi mat khau thu nghiem`. Khi chạy lệnh `git add` và thực hiện `git commit -m "test"`:
 
 ![Kết quả Git Hook chặn commit chứa secret](./images/lab2_hook_blocked.png)
 
