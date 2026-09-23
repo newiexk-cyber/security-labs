@@ -1,0 +1,19 @@
+# Virtual environments
+venv/
+env/
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# IDEs / OS files
+.vscode/
+.idea/
+.DS_Store
+
+# Temporary legacy folders
+secure-validator-lab/
+buoi1/secure-validator-lab/
