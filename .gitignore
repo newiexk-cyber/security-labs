@@ -17,3 +17,7 @@ __pycache__/
 # Temporary legacy folders
 secure-validator-lab/
 buoi1/secure-validator-lab/
+
+# Logs and scans
+*.log
+gitsecure.log
