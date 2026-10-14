@@ -23,6 +23,10 @@ Repository lưu trữ mã nguồn và báo cáo các bài thực hành môn Lậ
 - **Lab 1**: Ứng dụng SecureChat qua Socket SSL/TLS (xác thực mTLS, mã hóa đầu-cuối AES-256-CBC, đa luồng).
 - **Lab 2**: Bộ công cụ trinh sát mạng NetRecon (quét cổng bất đồng bộ asyncio, nhận diện dịch vụ Nmap, bản đồ ARP, đối chiếu CVE, CLI & Web Flask).
 
+### [Buổi 4: Bảo mật Web App và API](./buoi4/README.md)
+- **Lab 1**: Công cụ quét lỗ hổng ứng dụng web WebVulnScanner (kiểm tra XSS, SQL Injection, CSRF, SSRF, CLI & Web Flask).
+- **Lab 2**: Bộ công cụ kiểm thử bảo mật JWT & OAuth 2.0 JWTSecure (API Gateway Bearer Token, Brute-force Cracker, TokenManager, Validator).
+
 ---
 
 ## Cấu trúc thư mục
@@ -41,9 +45,14 @@ security-labs/
 │   ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 2
 │   ├── lab1/               # Lab 1: Thư viện mật mã SecureCrypto
 │   └── lab2/               # Lab 2: Hệ thống chứng thực số Mini CA (PKI)
-└── buoi3/                  # Buổi 3: Bảo mật mạng máy tính
-    ├── README.md           # Báo cáo chi tiết Buổi 3 kèm ảnh minh chứng
-    ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 3
-    ├── lab1/               # Lab 1: Ứng dụng chat bảo mật SecureChat (SSL/TLS & AES)
-    └── lab2/               # Lab 2: Bộ công cụ trinh sát mạng NetRecon (Nmap & Flask)
+├── buoi3/                  # Buổi 3: Bảo mật mạng máy tính
+│   ├── README.md           # Báo cáo chi tiết Buổi 3 kèm ảnh minh chứng
+│   ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 3
+│   ├── lab1/               # Lab 1: Ứng dụng chat bảo mật SecureChat (SSL/TLS & AES)
+│   └── lab2/               # Lab 2: Bộ công cụ trinh sát mạng NetRecon (Nmap & Flask)
+└── buoi4/                  # Buổi 4: Bảo mật Web App và API
+    ├── README.md           # Báo cáo chi tiết Buổi 4 kèm ảnh minh chứng
+    ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 4
+    ├── lab1/               # Lab 1: Công cụ quét lỗ hổng Web (WebVulnScanner)
+    └── lab2/               # Lab 2: Bộ công cụ bảo mật Token (JWTSecure)
 ```
