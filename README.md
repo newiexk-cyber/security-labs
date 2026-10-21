@@ -1,6 +1,7 @@
 # Báo cáo thực hành Lập trình an toàn
 
 - **Sinh viên**: Nguyễn Nhật Lâm
+- **Mã số sinh viên**: 2387700036
 - **Môn học**: Lập trình an toàn (Bảo mật ứng dụng)
 - **Repository**: [https://github.com/newiexk-cyber/security-labs](https://github.com/newiexk-cyber/security-labs)
 
@@ -27,6 +28,10 @@ Repository lưu trữ mã nguồn và báo cáo các bài thực hành môn Lậ
 - **Lab 1**: Công cụ quét lỗ hổng ứng dụng web WebVulnScanner (kiểm tra XSS, SQL Injection, CSRF, SSRF, CLI & Web Flask).
 - **Lab 2**: Bộ công cụ kiểm thử bảo mật JWT & OAuth 2.0 JWTSecure (API Gateway Bearer Token, Brute-force Cracker, TokenManager, Validator).
 
+### [Buổi 5: Phân tích và kiểm thử bảo mật (SAST & DAST)](./buoi5/README.md)
+- **Lab 1**: Công cụ phân tích mã nguồn tĩnh SAST-Tool (AST analyzer, pattern matching, flake8 linter, báo cáo chuẩn SARIF).
+- **Lab 2**: Nền tảng phân tích động DAST-Tool (giám sát psutil, memory leak/overflow, phân tích traffic mạng, Virtual Sandbox, Flask REST API).
+
 ---
 
 ## Cấu trúc thư mục
@@ -50,9 +55,14 @@ security-labs/
 │   ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 3
 │   ├── lab1/               # Lab 1: Ứng dụng chat bảo mật SecureChat (SSL/TLS & AES)
 │   └── lab2/               # Lab 2: Bộ công cụ trinh sát mạng NetRecon (Nmap & Flask)
-└── buoi4/                  # Buổi 4: Bảo mật Web App và API
-    ├── README.md           # Báo cáo chi tiết Buổi 4 kèm ảnh minh chứng
-    ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 4
-    ├── lab1/               # Lab 1: Công cụ quét lỗ hổng Web (WebVulnScanner)
-    └── lab2/               # Lab 2: Bộ công cụ bảo mật Token (JWTSecure)
+├── buoi4/                  # Buổi 4: Bảo mật Web App và API
+│   ├── README.md           # Báo cáo chi tiết Buổi 4 kèm ảnh minh chứng
+│   ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 4
+│   ├── lab1/               # Lab 1: Công cụ quét lỗ hổng Web (WebVulnScanner)
+│   └── lab2/               # Lab 2: Bộ công cụ bảo mật Token (JWTSecure)
+└── buoi5/                  # Buổi 5: Phân tích và kiểm thử bảo mật (SAST & DAST)
+    ├── README.md           # Báo cáo chi tiết Buổi 5 kèm ảnh minh chứng
+    ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 5
+    ├── sast-tool/          # Lab 1: Công cụ kiểm thử bảo mật tĩnh (SAST-Tool)
+    └── dast-tool/          # Lab 2: Nền tảng kiểm thử bảo mật động (DAST-Tool)
 ```
