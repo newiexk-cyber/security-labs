@@ -21,3 +21,9 @@ buoi1/secure-validator-lab/
 # Logs and scans
 *.log
 gitsecure.log
+
+# Node / Docusaurus build
+node_modules/
+build/
+.docusaurus/
+public/

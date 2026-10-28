@@ -1,0 +1,31 @@
+stages:
+  - build
+  - security
+  - deploy
+
+build-job:
+  stage: build
+  image: node:18-alpine
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - "build/"
+
+security-gate:
+  stage: security
+  image: python:3.12-alpine
+  script:
+    - python security_gate.py --scan-all
+  artifacts:
+    paths:
+      - "security-report.json"
+
+pages:
+  stage: deploy
+  script:
+    - mv build/ public/
+  artifacts:
+    paths:
+      - "public/"

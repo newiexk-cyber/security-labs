@@ -1,0 +1,15 @@
+{
+  "name": "my-pipeline-tutorial-project",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node build_site.js && node -e \"console.log('Serving Docusaurus site at http://localhost:3000')\"",
+    "build": "node build_site.js"
+  },
+  "dependencies": {
+    "@docusaurus/core": "3.5.2",
+    "@docusaurus/preset-classic": "3.5.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}

@@ -32,6 +32,10 @@ Repository lưu trữ mã nguồn và báo cáo các bài thực hành môn Lậ
 - **Lab 1**: Công cụ phân tích mã nguồn tĩnh SAST-Tool (AST analyzer, pattern matching, flake8 linter, báo cáo chuẩn SARIF).
 - **Lab 2**: Nền tảng phân tích động DAST-Tool (giám sát psutil, memory leak/overflow, phân tích traffic mạng, Virtual Sandbox, Flask REST API).
 
+### [Buổi 6: Bảo mật với DevSecOps](./buoi6/README.md)
+- **Lab 1**: Xây dựng pipeline CI/CD cơ bản với GitLab (các stage `build`, `test`, `deploy`, mô phỏng thực thi song song).
+- **Lab 2**: Pipeline CI/CD phức tạp cho dự án Docusaurus, tích hợp chốt bảo mật DevSecOps (Secret Scanning, SCA) và tự động triển khai lên GitLab Pages.
+
 ---
 
 ## Cấu trúc thư mục
@@ -60,9 +64,14 @@ security-labs/
 │   ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 4
 │   ├── lab1/               # Lab 1: Công cụ quét lỗ hổng Web (WebVulnScanner)
 │   └── lab2/               # Lab 2: Bộ công cụ bảo mật Token (JWTSecure)
-└── buoi5/                  # Buổi 5: Phân tích và kiểm thử bảo mật (SAST & DAST)
-    ├── README.md           # Báo cáo chi tiết Buổi 5 kèm ảnh minh chứng
-    ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 5
-    ├── sast-tool/          # Lab 1: Công cụ kiểm thử bảo mật tĩnh (SAST-Tool)
-    └── dast-tool/          # Lab 2: Nền tảng kiểm thử bảo mật động (DAST-Tool)
+├── buoi5/                  # Buổi 5: Phân tích và kiểm thử bảo mật (SAST & DAST)
+│   ├── README.md           # Báo cáo chi tiết Buổi 5 kèm ảnh minh chứng
+│   ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 5
+│   ├── sast-tool/          # Lab 1: Công cụ kiểm thử bảo mật tĩnh (SAST-Tool)
+│   └── dast-tool/          # Lab 2: Nền tảng kiểm thử bảo mật động (DAST-Tool)
+└── buoi6/                  # Buổi 6: Bảo mật với DevSecOps
+    ├── README.md           # Báo cáo chi tiết Buổi 6 kèm ảnh minh chứng
+    ├── images/             # Ảnh chụp kiểm thử thực tế Buổi 6
+    ├── lab1/               # Lab 1: Pipeline GitLab CI/CD cơ bản (build, test, deploy)
+    └── lab2/               # Lab 2: Pipeline Docusaurus & DevSecOps Security Gate
 ```
